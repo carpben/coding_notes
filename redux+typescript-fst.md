@@ -328,7 +328,7 @@ const ConnectedAddTodo = ({ dispatch }) => {
       type: "ADD_TODO", 
       text: input.current.value
     })
-  }}
+  }}    
   }
   ...
 }
