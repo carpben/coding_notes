@@ -4,6 +4,8 @@
 # Redux + Typescript - Writing quality Javascript was never so fast 
 # Redux + Typescript - Writing quality Javascript just became way faster
 # Redux + Typescript + Immer - Writing safe maintainble code just became blazing fast 
+# Redux patterns - Writing safe maintainable code just became blazing fast 
+## Part 1 - Redux + Typescript 
 
 
 Redux is rightly known as the gold standard for managing application state in Javascript. It separates app state from ui elements, and organizes the most important part of an application - app state and app logic in a coherent way. But many programmers complain that Redux requires too much boilerplate/ is too verbose, and is just not worth it. Many avoid it, some use Mobx instead. 
@@ -12,7 +14,7 @@ Typescript on the other hand is the gold standard for writing Javascript. It pro
 
 I suggest that Typescript integrates perfectly with Redux (and Redux like patterns). Together they allow for code which isn’t just safe organized and maintainable, but also lightning fast to write (less code and better support from the editor). That is if we don't just add Typescript on top of our Redux code,  but design our code according the the features Typescript has to offer. 
 
-## Traditional Redux pattern 
+### Traditional Redux pattern 
 First let's look at a traditional redux pattern, by looking at Redux official basic tutorial. 
 
 ```js
@@ -233,7 +235,7 @@ type Visibility = 'SHOW_ALL' | "SHOW_COMPLETED" | 'SHOW_COMPLETED'
 
 Then we need to add Types to our reducers, containers and actions creators. 
 
-## Can we do things differently? Rethinking Typescript - Redux integration 
+### Can we do things differently? Rethinking Typescript - Redux integration 
 The first aspect/space/angle we should redsign are actions. Action creators and action types are verbose and somewhat trivial. In certain repositories/projects they might have an important rule - enforcing unity/uniformity from a dispatcher to the reducer. But when we have Typescript in our tool chain, do we really need action creators? Can we remove them all together and remain with just a type? 
 
 A type can much better enforce uniformity between a dispatcher and a reducer than any constant or function. All action code can be replaced by the following: 
@@ -300,17 +302,14 @@ const ConnectedAddTodo = ({ dispatch }) => {
   ...
 }
 ```
-Look here to see how Redux code has shortened. We finished the first and most significant step. We now have safe maintainble code which is shorter and faster/quick to write. But we can further improve. In the next articles we'll look at adding Immer to the mix, and typing which is based on implentation rather than definitions.
+### Possible caveats: 
+1. If we decide to change "ADD_TODO" (action type string), we can't refactor in one centralized place. 
+2. Changing our actions into a type doesn't combine / can't go along the popular Redux - Thunk pattern. Later in this series I'll present a better/superior/more efficient pattern to handle our side effects. 
+
+-----------
+Look here to see how Redux code has shortened. 
+
+We finished the first and most significant step. We now have safe maintainble code which is shorter and faster/quick to write. But we can further improve. In the next articles we'll look at adding Immer to the mix, typing based on implementation, and managing all side effects in a Redux like middleware. 
 
 Until the next time, I'd love to read your comments and thoughts. 
-
-
-
-
-
-
-
-
-
-
 
