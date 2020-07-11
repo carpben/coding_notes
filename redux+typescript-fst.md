@@ -1,28 +1,19 @@
-# Redux + Typescript - Writing good code doesn’t have to mean more boilerplate 
-
-# Redux and Typscript both require boilerplate, but when combining them 
-
-# Redux + Typescript - A winning combination 
-
+# Redux + Typescript - Writing good code could mean less boilerplate
 # Redux + Typescript - Quality fast coding 
-
 # Redux + Typescript - Writing good/quality code could actually mean less boilerplate 
-# Redux + Typescript - Best practices 
 # Redux + Typescript - Writing quality Javascript was never so fast 
 # Redux + Typescript - Writing quality Javascript just became way faster
 # Redux + Typescript + Immer - Writing safe maintainble code just became blazing fast 
 
 
-Redux is rightly known as the gold standard for managing application state in Javascript. Why? 
-It separates app state from ui elements, and organizes the most important part of a front end application - app state and app logic. And it scales well. 
-The complaint most users have is that it requires a lot of boilerplate. Due to this reason many avoid Redux, or try Mobx instead. 
+Redux is rightly known as the gold standard for managing application state in Javascript. It separates app state from ui elements, and organizes the most important part of an application - app state and app logic in a coherent way. But many programmers complain that Redux requires too much boilerplate/ is too verbose, and is just not worth it. Many avoid it, some use Mobx instead. 
 
-Typescript on the other hand is the gold standart for writing good Javascript. It provides two huge/enourmous/essential benefits - code safety and better editing experience. But here again, some are reluctant to use Typescript since it requires type definitions, and hence - more boilerplate. 
+Typescript on the other hand is the gold standard for writing Javascript. It provides two important benefits - code safety and better editor/developer experience. But here again, some are reluctant to use Typescript since it requires type definitions, and hence - more verbose code. 
 
-But I suggest that Typescript integrates perfectly with Redux (and Redux like patterns), and by using the right patterns they allow us to write code which isn’t just safe organized and maintainable, but also lightning fast to write (less code and better support from the editor). 
+I suggest that Typescript integrates perfectly with Redux (and Redux like patterns). Together they allow for code which isn’t just safe organized and maintainable, but also lightning fast to write (less code and better support from the editor). That is if we don't just add Typescript on top of our Redux code,  but design our code according the the features Typescript has to offer. 
 
 ## Traditional Redux pattern 
-First let's look ata a traditional redux pattern, by looking at Redux official basic tutorial. 
+First let's look at a traditional redux pattern, by looking at Redux official basic tutorial. 
 
 ```js
 //actions.js
@@ -159,8 +150,8 @@ const ConnectedAddTodo = ({ dispatch }) => {
 }
 ```
 
-All this boilerplate for just 3 possible actions. All this boilerplate and we still haven't added Typescript, so our code isn't type safe, isn't mutation safe, and we don't get any support from the editor. Here are some examples for possible errors: 
-1. In the reducer checking for an action.type that can't possibly be dispatched. 
+All this boilerplate for just 3 possible actions. All this boilerplate and we still haven't added Typescript, so our code isn't type safe, isn't mutation safe, and we doesn't get much support from the editor. Here are some examples for possible errors: 
+1. The reducer checking for an action.type that can't possibly be dispatched. 
 ```js
 // reducers.js
 function todos(state = [], action) {
@@ -207,27 +198,8 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 
 5. And more 
 
-The way to solve this is adding Typescript. 
-We can solve it by adding Typescript. 
-But adding Typescript above/to this structure, while a common practice, means that our code will become even more verbose. Traditionally we'll have to add the following files (partially based on Redux official documentation https://redux.js.org/recipes/usage-with-typescript): 
-
-```ts
-// types/actions.ts 
-interface AddTodoAction {
-  type: "ADD_TODO"
-  text: string
-}
-
-interface ToggleTodoAction {
-  type: "TOGGLE_TODO"
-  index: number
-}
-
-interface SetVisibilityFilter {
-  type: "SET_VISIBILITY_FILTER"
-  filter:  'SHOW_ALL' | "SHOW_COMPLETED" | 'SHOW_COMPLETED'
-}
-```
+We can solve those by adding Typescript. 
+But adding Typescript on top of this structure, while a common practice, means that our code will become even more verbose. Traditionally we'll have to add the following files (partially based on Redux official documentation https://redux.js.org/recipes/usage-with-typescript): 
 
 ```ts
 // types/actions.ts 
@@ -259,16 +231,16 @@ type ToDos = Todo[]
 type Visibility = 'SHOW_ALL' | "SHOW_COMPLETED" | 'SHOW_COMPLETED'
 ```
 
-Then we need to add Types to our reducers, containers and actions. 
+Then we need to add Types to our reducers, containers and actions creators. 
 
 ## Can we do things differently? Rethinking Typescript - Redux integration 
-The first aspect/space/angle we might be able to handle better are actions. Action creators and action types are verbose and somewhat trivial. In certain repositories/projects they might have an important rule - enforcing אחדות from a dispatcher to the reducer. But when we have Typescript in our tool chain, can we remove them all together and remain with just ... a type. 
+The first aspect/space/angle we should redsign are actions. Action creators and action types are verbose and somewhat trivial. In certain repositories/projects they might have an important rule - enforcing unity/uniformity from a dispatcher to the reducer. But when we have Typescript in our tool chain, do we really need action creators? Can we remove them all together and remain with just a type? 
 
-A type can much better enforce unity between a dispatcher and a reducer than any constant or function. All action code will be replaced by the following: 
+A type can much better enforce uniformity between a dispatcher and a reducer than any constant or function. All action code can be replaced by the following: 
 ```ts
 //actionType.ts
 type Action =  {
-	type: "ADD_TODO"
+	type: "ADD_TODO" // Typescript literal type
 	text: string
 } | {
 	type: "TOGGLE_TODO"
@@ -279,7 +251,7 @@ type Action =  {
 }
 ```
 
-`ADD_TODO` is a "literal type". Together with Typescript's "Discriminated Unions" feature it allows for a very strong pattern. Lets see how we can use the in our reducers. 
+Lets see how `Action` can be used in our reducers. 
 ```ts
 function todos(state = [], action:Action) {
   switch (action.type) {
@@ -289,13 +261,13 @@ At this point Typescript knows that the only possible values are `"ADD_TODO"|"TO
 ```ts
 	case 'ADD_TODO' : 
 ```
-at this point Typescript knows the exact structure of you action. 
+`ADD_TODO` is a "literal type". Together with Typescript's "Discriminated Unions" feature, Typescript can at this point recognize the exact structure of you action. 
 ```ts
 	case 'ADD_TODO' : 
 		action. // autoComplete will show that there is only one field text of type string. 
 ```
 
-The same principle applies to the dispatcher. All we need to do is let Typescript know that it can only accept type Action. 
+The get the same benefits from the dispatcher side. All we need to do is let Typescript know that dispatch can only accept type Action. 
 Personally I'd create a custom `useDispatch` hook, but there are other ways to go as well. 
 
 ```js
@@ -306,8 +278,6 @@ const mapDispatchToProps = (dispatch:Dispatch<Action>, ownProps) => ({
     text
   )
 })
-
-export default connect(mapStateToProps, mapDispatchToProps)(Link)
 ```
 
 ```js 
@@ -320,10 +290,7 @@ const ConnectedAddTodo = ({ dispatch }) => {
   const dispatch = useDispatch()
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    if (!input.current.value.trim()) {
-      return
-    }
+    ...
     dispatch({ // Full type support. We can only dispatch a valid action, full support from the editor
       type: "ADD_TODO", 
       text: input.current.value
@@ -333,8 +300,9 @@ const ConnectedAddTodo = ({ dispatch }) => {
   ...
 }
 ```
+Look here to see how Redux code has shortened. We finished the first and most significant step. We now have safe maintainble code which is shorter and faster/quick to write. But we can further improve. In the next articles we'll look at adding Immer to the mix, and typing which is based on implentation rather than definitions.
 
-We finished the first and most significant step. We now have safe maintainble code which is shorter and faster/quick to write. But we can do better. In the next articles we'll look at adding Immer to the mix, and typing which is based on implentation rather than definition. 
+Until the next time, I'd love to read your comments and thoughts. 
 
 
 
