@@ -307,7 +307,9 @@ const ConnectedAddTodo = ({ dispatch }) => {
 2. Changing our actions into a type doesn't combine / can't go along the popular Redux - Thunk pattern. Later in this series I'll present a better/superior/more efficient pattern to handle our side effects. 
 
 -----------
-Here you can see a complete comparison. In terms of length, our redux files (actions, reudcers and connected components) contains 21% less characters. 
+[Link to Redux code in the traditional pattern](https://github.com/carpben/coding_notes/blob/master/Redux%20patterns/traditional-pattern.md) 
+[Link to Redux code in the suggested pattern](https://github.com/carpben/coding_notes/blob/master/Redux%20patterns/suggestedPattern.md)
+In terms of length, our redux files (actions, reudcers and connected components) contains 21% less characters. 
 
 We finished the first and most significant step. We now have safe maintainble code which is shorter and faster/quick to write. But we can further improve. In the next articles we'll look at adding Immer to the mix, typing based on implementation, and managing all side effects in a Redux like middleware. 
 
