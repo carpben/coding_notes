@@ -3,12 +3,12 @@
 # Redux + Typescript - Writing good/quality code could actually mean less boilerplate 
 # Redux + Typescript - Writing quality Javascript was never so fast 
 # Redux + Typescript - Writing quality Javascript just became way faster
-# Redux + Typescript + Immer - Writing safe maintainble code just became blazing fast 
+# Redux + Typescript + Immer - Writing safe maintainable code just became blazing fast 
 # Redux patterns - Writing safe maintainable code just became blazing fast 
 ## Part 1 - Redux + Typescript 
 
 
-Redux is currently recognized as the gold standard for managing application state in ReactJS. It separates app state from UI elements, and organizes the most important parts of an application which are the app state and app logic in a coherent way. However, many programmers still complain that Redux requires too much boilerplate and is too verbose and therefore is just not worth it. Many avoid it, some use Mobx instead. 
+Redux is currently recognized as the gold standard for managing application state in ReactJS. It separates app state from UI elements, and organizes the most important parts of an application which are the app state and app logic in a coherent way. However, many programmers still complain that Redux requires too much boilerplate and is too verbose and therefore is just not worth it. Many avoid it entirely and some use Mobx instead. 
 
 Typescript on the other hand is the gold standard for writing Javascript. It provides two important benefits which are code safety and better editor/developer experience. But again, some are reluctant to use Typescript since it requires type definitions and hence more verbose code. 
 
@@ -225,7 +225,7 @@ interface SetVisibilityFilter {
 //types/state.ts
 type Todo = {
 	text: string 
-	completed: boolean 
+	completed: boolean
 }
 
 type ToDos = Todo[]
@@ -236,9 +236,9 @@ type Visibility = 'SHOW_ALL' | "SHOW_COMPLETED" | 'SHOW_COMPLETED'
 Then we need to add Types to our reducers, containers and actions creators. 
 
 ### Can we do things differently? Rethinking Typescript - Redux integration 
-The first aspect/space/angle we should redsign are actions. Action creators and action types are verbose and somewhat trivial. In certain repositories/projects they might have an important rule - enforcing unity/uniformity from a dispatcher to the reducer. But when we have Typescript in our tool chain, do we really need action creators? Can we remove them all together and remain with just a type? 
+The first aspect we should redesign are actions. Action creators and action types are verbose and somewhat trivial. In certain repositories/projects they might have an important rule when it comes to enforcing uniformity from a dispatcher to the reducer. But when we have Typescript in our tool chain, do we really need action creators? Can we remove them altogether and remain with just a type? 
 
-A type can much better enforce uniformity between a dispatcher and a reducer than any constant or function. All action code can be replaced by the following: 
+A type can be much better at enforcing uniformity between a dispatcher and a reducer than any constant or function. All action code can be replaced by the following: 
 ```ts
 //actionType.ts
 type Action =  {
@@ -253,23 +253,23 @@ type Action =  {
 }
 ```
 
-Lets see how `Action` can be used in our reducers. 
+Let's see how `Action` can be used in our reducers. 
 ```ts
 function todos(state = [], action:Action) {
   switch (action.type) {
     case "
 ```
-At this point Typescript knows that the only possible values are `"ADD_TODO"|"TOGGLE_TODO"|"SET_VISIBILITY_FILTER"` and the editor should offer those options as autocomplete, and no other options are allowed. 
+At this point Typescript knows that the only possible values are `"ADD_TODO"|"TOGGLE_TODO"|"SET_VISIBILITY_FILTER"` and the editor should offer those options as autocomplete and no other options are allowed. 
 ```ts
-	case 'ADD_TODO' : 
+	case 'ADD_TODO' :
 ```
-`ADD_TODO` is a "literal type". Together with Typescript's "Discriminated Unions" feature, Typescript can at this point recognize the exact structure of you action. 
+`ADD_TODO` is a "literal type". Together with Typescript's "Discriminated Unions" feature, Typescript can at this point recognize the exact structure of your action. 
 ```ts
-	case 'ADD_TODO' : 
+	case 'ADD_TODO' :
 		action. // autoComplete will show that there is only one field text of type string. 
 ```
 
-The get the same benefits from the dispatcher side. All we need to do is let Typescript know that dispatch can only accept type Action. 
+We get the same benefits from the dispatcher side. All we need to do is let Typescript know that dispatch can only accept type Action. 
 Personally I'd create a custom `useDispatch` hook, but there are other ways to go as well. 
 
 ```js
@@ -297,7 +297,7 @@ const ConnectedAddTodo = ({ dispatch }) => {
       type: "ADD_TODO", 
       text: input.current.value
     })
-  }}        
+  }}
   }
   ...
 }
@@ -309,9 +309,9 @@ const ConnectedAddTodo = ({ dispatch }) => {
 -----------
 [Link to Redux code in the traditional pattern](https://github.com/carpben/coding_notes/blob/master/Redux%20patterns/traditional-pattern.md) 
 [Link to Redux code in the suggested pattern](https://github.com/carpben/coding_notes/blob/master/Redux%20patterns/suggestedPattern.md)
-In terms of length, our redux files (actions, reudcers and connected components) contains 21% less characters. 
+In terms of length, our redux files (actions, reducers and connected components) contains 21% less characters. 
 
-We finished the first and most significant step. We now have safe maintainble code which is shorter and faster to write. But we can further improve. In the next articles we'll look at adding Immer to the mix, typing based on implementation, and managing all side effects in a Redux like middleware. 
+We finished the first and most significant step. We now have safe maintainable code which is shorter and faster to write. But we can further improve. In the next articles we'll look at adding Immer to the mix, typing based on implementation, and managing all side effects in a Redux like middleware. 
 
 Until the next time, I'd love to read your comments and thoughts. 
 
