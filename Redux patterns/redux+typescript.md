@@ -8,7 +8,7 @@
 ## Part 1 - Redux + Typescript 
 
 
-Redux is currently recognized as the gold standard for managing application state in ReactJS. It separates app state from UI elements, and organizes the most important parts of an application which are the app state and app logic in a coherent way. However, many programmers still complain that Redux requires too much boilerplate and is too verbose and therefore is just not worth it. Many avoid it entirely and some use Mobx instead. 
+Redux is currently recognized as the gold standard for managing application state in JavaScript. It separates app state from UI elements, and organizes the most important parts of an application which are the app state and app logic in a coherent way. However, many programmers still complain that Redux requires too much boilerplate and is too verbose and therefore is just not worth it. Many avoid it entirely and some use Mobx instead. 
 
 Typescript on the other hand is the gold standard for writing Javascript. It provides two important benefits which are code safety and better editor/developer experience. But again, some are reluctant to use Typescript since it requires type definitions and hence more verbose code. 
 
