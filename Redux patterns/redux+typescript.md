@@ -1,16 +1,10 @@
-# Redux + Typescript - Writing good code could mean less boilerplate
-# Redux + Typescript - Quality fast coding 
-# Redux + Typescript - Writing good/quality code could actually mean less boilerplate 
-# Redux + Typescript - Writing quality Javascript was never so fast 
-# Redux + Typescript - Writing quality Javascript just became way faster
-# Redux + Typescript + Immer - Writing safe maintainable code just became blazing fast 
 # Redux patterns - Writing safe maintainable code just became blazing fast 
 ## Part 1 - Redux + Typescript 
 
 
-Redux is currently recognized as the gold standard for managing application state in JavaScript. It separates app state from UI elements, and organizes the most important parts of an application which are the app state and app logic in a coherent way. However, many programmers still complain that Redux requires too much boilerplate and is too verbose and therefore is just not worth it. Many avoid it entirely and some use Mobx instead. 
+Redux is currently recognized as the gold standard for managing application state in JavaScript. It separates app state from UI elements, and organizes the most important parts of an application - app state and app logic - in a coherent way. However, many programmers complain that Redux requires too much boilerplate and is too verbose and therefore is just not worth it. Many avoid it entirely and some use Mobx instead. 
 
-Typescript on the other hand is the gold standard for writing Javascript. It provides two important benefits which are code safety and better editor/developer experience. But again, some are reluctant to use Typescript since it requires type definitions and hence more verbose code. 
+Typescript on the other hand is the gold standard for writing Javascript. It provides two important benefits - code safety and better editor/developer experience. But again, some are reluctant to use Typescript since it requires type definitions and hence more verbose code. 
 
 I suggest that Typescript integrates perfectly with Redux (and Redux like patterns). Together they allow for code which isn’t just safe, organized and maintainable, but also lightning fast to write (less code and better support from the editor). That is if we don't just add Typescript on top of our Redux code, but design our code according the the features Typescript has to offer. 
 
@@ -236,7 +230,7 @@ type Visibility = 'SHOW_ALL' | "SHOW_COMPLETED" | 'SHOW_COMPLETED'
 Then we need to add Types to our reducers, containers and actions creators. 
 
 ### Can we do things differently? Rethinking Typescript - Redux integration 
-The first aspect we should redesign are actions. Action creators and action types are verbose and somewhat trivial. In certain repositories/projects they might have an important rule when it comes to enforcing uniformity from a dispatcher to the reducer. But when we have Typescript in our tool chain, do we really need action creators? Can we remove them altogether and remain with just a type? 
+The first aspect we should redesign are actions. Action creators and action types are verbose and somewhat trivial. In certain repositories/projects they might have an important rule - enforcing uniformity from a dispatcher to the reducer. But when we have Typescript in our tool chain, do we really need action creators? Can we remove them altogether and remain with just a type? 
 
 A type can be much better at enforcing uniformity between a dispatcher and a reducer than any constant or function. All action code can be replaced by the following: 
 ```ts
