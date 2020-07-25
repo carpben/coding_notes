@@ -247,20 +247,39 @@ type Action =  {
 }
 ```
 
-Let's see how `Action` can be used in our reducers. 
+
+
+### Reducer - traditional pattern 
 ```ts
 function todos(state = [], action:Action) {
   switch (action.type) {
-    case "
+    case ADD_TODO: // 
 ```
-At this point Typescript knows that the only possible values are `"ADD_TODO"|"TOGGLE_TODO"|"SET_VISIBILITY_FILTER"` and the editor should offer those options as autocomplete and no other options are allowed. 
+In the traditional pattern, since we use an identifier, the editor can't be of much help. We are on our own - we need to know exactly what identifier we are looking for for each `case`. 
+
+### Reducer - Suggested pattern
+```ts
+function todos(state = [], action:Action) {
+  switch (action.type) {
+    case "ADD_TODO" :
+```
+As soon as we type `case "` the editor has our back / is right behind us. 
+At this point Typescript knows that the only possible values are `"ADD_TODO"|"TOGGLE_TODO"|"SET_VISIBILITY_FILTER"` and the editor should offer those options, and no other option, as autocomplete. 
+This could be quite significant. First, action.type might be named differently `"APPEND_TOTO"` or `"CREATE_TODO"`. Using this method the editor tells you what you are looking for. Second, imagine a big project, with over a hundred possible actions. Wouldn't it be helpful if the editor tells you what actions will flow through the reducer, and you should consider?  
+
+Further more, `ADD_TODO` is a "literal type". Together with Typescript's "Discriminated Unions" feature, Typescript can at this point recognize the exact structure of our action. 
 ```ts
 	case 'ADD_TODO' :
+		action. // autoComplete will show that there is only one property - `text` of type string. 
 ```
-`ADD_TODO` is a "literal type". Together with Typescript's "Discriminated Unions" feature, Typescript can at this point recognize the exact structure of your action. 
+
+### dispatcher - traditional pattern 
 ```ts
-	case 'ADD_TODO' :
-		action. // autoComplete will show that there is only one field text of type string. 
+import addTodo from "actions"
+
+const mapDispatchToProps = (dispatch:Dispatch, ownProps) => ({
+  onClick: (text:string) => dispatch(addTodo (text)) 
+})
 ```
 
 We get the same benefits from the dispatcher side. All we need to do is let Typescript know that dispatch can only accept type Action. 
@@ -269,13 +288,17 @@ Personally I'd create a custom `useDispatch` hook, but there are other ways to g
 ```js
 // containers/FilterLink.js 
 const mapDispatchToProps = (dispatch:Dispatch<Action>, ownProps) => ({
-  onClick: (text:string) => dispatch(  // After typing dispatch we can only dispatch a valid action
-    type: 'ADD_TODO' // Even if code is slightly longer, coding is much faster, since we get full support from the editor
+  onClick: (text:string) => dispatch({  
+    type: 'ADD_TODO', 
     text
   )
 })
 ```
+After typing dispatch we can only dispatch a valid action
+Even if code is slightly longer, coding is much faster, since we get full support from the editor
 
+
+The same applies for react-redux hooks. 
 ```js 
 // containers/ConnectedAddTodo using the useDispatch hook
 
@@ -297,13 +320,13 @@ const ConnectedAddTodo = ({ dispatch }) => {
 }
 ```
 ### Possible caveats: 
-1. If we decide to change "ADD_TODO" (action type string), we can't refactor it in one centralized place. 
-2. Changing our actions into a type doesn't go along with the popular Redux Thunk pattern. Later in this series I'll present a more efficient pattern to handle our side effects. 
+1. If we decide to change action.type property (e.x from "ADD_TODO" to "APPEND_TODO") or the names of certain properties, we can't refactor it in one centralized place, since we don't have a const or a function. But my experience is that it is very quick and straight forward. 
+2. Changing our actions into a type doesn't go along with the popular Redux Thunk pattern. It's not a function, so an action can't dispatch an action. Later in this series I'll present a more efficient pattern to handle our side effects. 
 
 -----------
 [Link to Redux code in the traditional pattern](https://github.com/carpben/coding_notes/blob/master/Redux%20patterns/traditional-pattern.md) 
 [Link to Redux code in the suggested pattern](https://github.com/carpben/coding_notes/blob/master/Redux%20patterns/suggestedPattern.md)
-In terms of length, our redux files (actions, reducers and connected components) contains 21% less characters. 
+In terms of length, our redux files (actions, reducers and connected components) contains 21% less characters. In terms of development, it's a different experience. 
 
 We finished the first and most significant step. We now have safe maintainable code which is shorter and faster to write. But we can further improve. In the next articles we'll look at adding Immer to the mix, typing based on implementation, and managing all side effects in a Redux like middleware. 
 
