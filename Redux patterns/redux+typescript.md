@@ -315,11 +315,11 @@ const ConnectedAddTodo = ({ dispatch }) => {
   ...
   const dispatch = useDispatch()
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (text) => {
     ...
     dispatch({ // Full type support. We can only dispatch a valid action, full support from the editor
       type: "ADD_TODO", 
-      text: input.current.value
+      text
     })
   }}
   }
