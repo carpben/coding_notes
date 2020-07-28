@@ -1,12 +1,22 @@
 # Redux patterns - Writing safe maintainable code just became blazing fast 
+## Intro 
+
+Redux recently celebrated 5 years of being released. The library was originally developed by Dan Abramov and shortly after became Javascript’s most popular state management library. 
+
+IMHO Redux deserves the credit it receives from the community. It separates app state from UI elements, and organizes the most important parts of an application - app state and app logic - in a coherent way. At the same time it is composable and independent, and therefore can work with various frontend frameworks and environments. 
+
+However, a common complaint is that Redux requires too much boilerplate and is too verbose and therefore is just not worth it. For this reason many avoid it entirely. Some use Mobx instead. 
+
+But since Redux's release the JS community has progressed a great deal. The 2020 JS ecosystem isn’t anything like that of 2015. Static typing has greatly improved, proxies were standardized, new immutability tools were developed by the community, React introduced hooks, and much more. All those mean that we can use Redux differently. Perhaps even to redefine the way we think about Redux.  Not just a library which allows us to manage our state in a centralized predictable way, but one which could also be safe to use, fast to use, all while enjoying exceptional developer experience. 
+
 ## Part 1 - Redux + Typescript 
 
+Redux is currently recognized as the gold standard for managing application state in JavaScript. But it is considered verbose / boilerplate oriented. 
+ 
+Typescript on the other hand is the gold standard for writing Javascript. It provides two important benefits - code safety and better editor/developer experience. But again, some are reluctant to use TypeScript since it requires type definitions and hence more verbose code.
 
-Redux is currently recognized as the gold standard for managing application state in JavaScript. It separates app state from UI elements, and organizes the most important parts of an application - app state and app logic - in a coherent way. However, many programmers complain that Redux requires too much boilerplate and is too verbose and therefore is just not worth it. Many avoid it entirely and some use Mobx instead. 
+One could imagine that using both frameworks together would be exhausting to develop in. But it doesn't have to be this way. I suggest that TypeScript integrates perfectly with Redux (and Redux like patterns). Together they allow for code which isn’t just safe, organized and maintainable, but also fast to write (less code and better support from the editor). That is if we don't just add Typescript on top of our Redux code, but design our code according to the features Typescript has to offer.
 
-Typescript on the other hand is the gold standard for writing Javascript. It provides two important benefits - code safety and better editor/developer experience. But again, some are reluctant to use Typescript since it requires type definitions and hence more verbose code. 
-
-I suggest that Typescript integrates perfectly with Redux (and Redux like patterns). Together they allow for code which isn’t just safe, organized and maintainable, but also lightning fast to write (less code and better support from the editor). That is if we don't just add Typescript on top of our Redux code, but design our code according the the features Typescript has to offer. 
 
 ### Traditional Redux pattern 
 First let's take a look at a traditional redux pattern, by looking at Redux's official basic tutorial. 
@@ -146,7 +156,7 @@ const ConnectedAddTodo = (props) => {
 }
 ```
 
-All this boilerplate for just 3 possible actions. All this boilerplate and we still haven't added Typescript, so our code isn't type safe, isn't mutation safe, and we don't get much support from the editor either. Here are some examples for possible errors: 
+Our code handles 3 possible actions. One might say that it leans towards the verbose. And yet much could go wrong, here are some examples:
 1. The reducer checking for an action.type that can't possibly be dispatched. 
 ```js
 // reducers.js
@@ -192,10 +202,10 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 })
 ```
 
-5. And more 
 
-We can solve those by adding Typescript. 
-But adding Typescript on top of this structure, while a common practice, means that our code will become even more verbose. Traditionally we'll have to add the following files (partially based on Redux official documentation https://redux.js.org/recipes/usage-with-typescript): 
+Currently our code isn't type safe, isn't mutation safe, and we don’t get much support from the editor either.
+
+We can solve those with TypeScript. But adding TypeScript on top of the current structure, while a common practice, means that our code will become even more verbose. Traditionally we'll have to add the following files (partially based on Redux official documentation https://redux.js.org/recipes/usage-with-typescript): 
 
 ```ts
 // types/actions.ts 
@@ -229,8 +239,10 @@ type Visibility = 'SHOW_ALL' | "SHOW_COMPLETED" | 'SHOW_COMPLETED'
 
 Then we need to add Types to our reducers, containers and actions creators. 
 
-### Can we do things differently? Rethinking Typescript - Redux integration 
-The first aspect we should redesign are actions. Action creators and action types are verbose and somewhat trivial. In certain repositories/projects they might have an important rule - enforcing uniformity from a dispatcher to the reducer. But when we have Typescript in our tool chain, do we really need action creators? Can we remove them altogether and remain with just a type? 
+### Rethinking Typescript - Redux integration 
+The first aspect of Redux's traditional pattern we should reconsider are actions. Action creators and action type constants (`const ADD_TASK = "ADD_TASK") are verbose and somewhat trivial. For projects written in vanilla JS they have an important role - standardizing the actions that can be thrown from a dispatcher on the one end and to be expected by a reducer on the other end. But when we have TypeScript in our tool chain, do we really need functions, which don’t have any functionality, just for standardizing?
+
+TypeScript has a better tool for standardizing objects - types. Can we discard action creators altogether and remain with just a type? 
 
 A type can be much better at enforcing uniformity between a dispatcher and a reducer than any constant or function. All action code can be replaced by the following: 
 ```ts
@@ -246,8 +258,7 @@ type Action =  {
 	filter: "SHOW_ALL" | "SHOW_COMPLETED" | "SHOW_COMPLETED"
 }
 ```
-
-
+The most difficult half of our job is done - we have a type to represent an action. This type is at the core of the suggested pattern. Now that we have a type, we can use actions conveniently. Lets see what it could look like.
 
 ### Reducer - traditional pattern 
 ```ts
