@@ -323,7 +323,9 @@ After typing dispatch we can only dispatch a valid action. Even if code is sligh
 
 -----------
 [Link to Redux code in the traditional pattern](https://github.com/carpben/coding_notes/blob/master/Redux%20patterns/traditional-pattern.md) 
+
 [Link to Redux code in the suggested pattern](https://github.com/carpben/coding_notes/blob/master/Redux%20patterns/suggestedPattern.md)
+
 In terms of length, our redux files (actions, reducers and connected components) contains 21% less characters. In terms of development, it's a different experience. 
 
 We finished the first and most significant step. We now have safe maintainable code which is shorter and faster to write. But we can further improve. In the next articles we'll look at adding Immer to the mix, typing based on implementation, and managing all side effects in a Redux like middleware. 
