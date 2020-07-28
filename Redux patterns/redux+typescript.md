@@ -264,14 +264,14 @@ function todos(state = [], action:Action) {
     case "ADD_TODO" :
 ```
 As soon as we type `case "` the editor has our back / is right behind us. 
-At this point Typescript knows that the only possible values are `"ADD_TODO"|"TOGGLE_TODO"|"SET_VISIBILITY_FILTER"` and the editor should offer those options, and no other option, as autocomplete. 
-This could be quite significant. First, action.type might be named differently `"APPEND_TOTO"` or `"CREATE_TODO"`. Using this method the editor tells you what you are looking for. Second, imagine a big project, with over a hundred possible actions. Wouldn't it be helpful if the editor tells you what actions will flow through the reducer, and you should consider?  
+At this point Typescript knows that the only possible values are `"ADD_TODO"|"TOGGLE_TODO"|"SET_VISIBILITY_FILTER"` and the editor will offer those options, and no other option, as autocomplete. 
+This is significant. Imagine a big project with over a hundred possible actions. Wouldn't it be helpful if the editor tells you what actions flow through the reducer, and you should consider?  
 
-Further more, `ADD_TODO` is a "literal type". Together with Typescript's "Discriminated Unions" feature, Typescript can at this point recognize the exact structure of our action. 
 ```ts
 	case 'ADD_TODO' :
 		action. // autoComplete will show that there is only one property - `text` of type string. 
 ```
+`ADD_TODO` is a "literal type". Due to Typescript's "literal type" and "Discriminated Unions" features, at this point Typescript recognizes the exact structure of our action. 
 
 ### dispatcher - traditional pattern 
 ```ts
@@ -281,27 +281,23 @@ const mapDispatchToProps = (dispatch:Dispatch, ownProps) => ({
   onClick: (text:string) => dispatch(addTodo (text)) 
 })
 ```
+- We can dispatch anything as long as it's an object. This means that we can also dispatch actions that our reducers aren't aware of and therefor doesn't handle. 
+- We need to know in advance what identifier (`addToDo` in the example above) we are looking for. 
 
-We get the same benefits from the dispatcher side. All we need to do is let Typescript know that dispatch can only accept type Action. 
-Personally I'd create a custom `useDispatch` hook, but there are other ways to go as well. 
+
+### dispatcher - suggested pattern 
+All we need to do is let Typescript know that dispatch can only accept type Action. 
 
 ```js
-// containers/FilterLink.js 
+// connected / container component form
 const mapDispatchToProps = (dispatch:Dispatch<Action>, ownProps) => ({
   onClick: (text:string) => dispatch({  
     type: 'ADD_TODO', 
     text
   )
 })
-```
-After typing dispatch we can only dispatch a valid action
-Even if code is slightly longer, coding is much faster, since we get full support from the editor
 
-
-The same applies for react-redux hooks. 
-```js 
-// containers/ConnectedAddTodo using the useDispatch hook
-
+// useDispatch form
 const useTodosDispatch = useDispatch as () => Dispatch<Action>
 
 const ConnectedAddTodo = ({ dispatch }) => {
@@ -319,9 +315,11 @@ const ConnectedAddTodo = ({ dispatch }) => {
   ...
 }
 ```
+After typing dispatch we can only dispatch a valid action. Even if code is slightly longer, coding is much faster, since we get full support from the editor
+
 ### Possible caveats: 
-1. If we decide to change action.type property (e.x from "ADD_TODO" to "APPEND_TODO") or the names of certain properties, we can't refactor it in one centralized place, since we don't have a const or a function. But my experience is that it is very quick and straight forward. 
-2. Changing our actions into a type doesn't go along with the popular Redux Thunk pattern. It's not a function, so an action can't dispatch an action. Later in this series I'll present a more efficient pattern to handle our side effects. 
+1. If we decide to change action.type property (e.x from "ADD_TODO" to "APPEND_TODO") or the names of certain properties, we can't refactor it in one centralized place, since we don't have a const or a function. My experience so far is that it is a minor limitation/drawback. 
+2. Changing our actions into a type doesn't go along with the popular Redux Thunk pattern. It's not a function, so an action can't dispatch an action. Later in this series I'll present a more efficient pattern IMO to handle side effects. 
 
 -----------
 [Link to Redux code in the traditional pattern](https://github.com/carpben/coding_notes/blob/master/Redux%20patterns/traditional-pattern.md) 
