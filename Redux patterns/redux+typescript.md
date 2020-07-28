@@ -244,7 +244,7 @@ The first aspect of Redux's traditional pattern we should reconsider are actions
 
 TypeScript has a better tool for standardizing objects - types. Can we discard action creators altogether and remain with just a type? 
 
-A type can be much better at enforcing uniformity between a dispatcher and a reducer than any constant or function. All action code can be replaced by the following: 
+My experience is that it could have significant benefits. Let's see what it might look like. All action code can be replaced by the following: 
 ```ts
 //actionType.ts
 type Action =  {
