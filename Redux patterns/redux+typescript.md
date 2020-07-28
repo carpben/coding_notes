@@ -266,7 +266,7 @@ function todos(state = [], action:Action) {
   switch (action.type) {
     case ADD_TODO: // 
 ```
-In the traditional pattern, since we use an identifier, the editor can't be of much help. We are on our own - we need to know exactly what identifier we are looking for for each `case`. 
+In the traditional pattern, since we use an identifier (the const `ADD_TODO`), the editor can't be of much help. We are on our own - we need to know exactly what identifier we are looking for for each `case`. 
 
 ### Reducer - Suggested pattern
 ```ts
@@ -305,7 +305,7 @@ const mapDispatchToProps = (dispatch:Dispatch<Action>, ownProps) => ({
   onClick: (text:string) => dispatch({  
     type: 'ADD_TODO', 
     text
-  )
+  })
 })
 
 // useDispatch form
@@ -335,9 +335,9 @@ After typing `dispatch` we can only dispatch a valid action. The editor suggests
 
 [Link to our Redux code in the suggested pattern](https://github.com/carpben/coding_notes/blob/master/Redux%20patterns/suggestedPattern.md)
 
-In terms of length, our redux files (actions, reducers and connected components) contains 21% less characters. In terms of development, it's a different experience. 
+Comparing the traditional pattern (with TypeScript) to the suggested pattern, in terms of length our redux files (actions, reducers and connected components) contain 21% less characters. In terms of development, it's a different experience. 
 
-We finished the first and most significant step. We now have safe maintainable code which is shorter and faster to write. But we can further improve. In the next articles we'll look at adding Immer to the mix, typing based on implementation, and managing all side effects in a Redux like middleware. 
+We finished the first and most significant step. At this point our Redux code is more safe, more maintainable and more friendly to the developer. But we can further improve. In the next articles we'll look at adding Immer to the mix, typing based on implementation, and managing all side effects in a Redux like middleware. 
 
 Until the next time, I'd love to read your comments and thoughts. 
 
