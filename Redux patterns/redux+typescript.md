@@ -324,7 +324,7 @@ const ConnectedAddTodo = ({ dispatch }) => {
   ...
 }
 ```
-After typing dispatch we can only dispatch a valid action. The editor suggests proper strings for the type property, and once we enter our type, it suggests the required properties. Even if code is slightly longer, coding is much faster. 
+After typing `dispatch` we can only dispatch a valid action. The editor suggests proper strings for the type property, and once we enter our type, it suggests the required properties. Even if code is slightly longer, coding is much faster. 
 
 ### Possible caveats: 
 1. If we decide to change action.type property (e.x from "ADD_TODO" to "APPEND_TODO") or the names of certain properties, we can't refactor it in one centralized place, since we don't have a const or a function. My experience so far is that it is a minor limitation/drawback. 
