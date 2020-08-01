@@ -326,8 +326,8 @@ const ConnectedAddTodo = ({ dispatch }) => {
 ```
 After typing `dispatch` we can only dispatch a valid action. The editor suggests proper strings for the type property, and once we enter our type, it suggests the required properties. Even if code is slightly longer, coding is much faster. 
 
-### Possible caveats: 
-1. If we decide to change action.type property (e.x from "ADD_TODO" to "APPEND_TODO") or the names of certain properties, we can't refactor it in one centralized place, since we don't have a const or a function. My experience so far is that it is a minor limitation/drawback. 
+### PChallenges: 
+1. In our current code, we can't rename an action's property or action.type automatically (e.x from "ADD_TODO" to "APPEND_TODO"). To be able to rename action name automatically use an enum for action.type instead of string literal. To be able to rename action's property automatically type dispatcher as `(action:Action) => unknown`. 
 2. Changing our actions into a type doesn't go along with the popular Redux Thunk pattern. It's not a function, so an action can't dispatch an action. Later in this series I'll present a more efficient pattern IMO to handle side effects. 
 
 -----------
